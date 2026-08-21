@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="keywords" content="Hava, Hava durumu, Türkiye hava durumu, istanbul hava durumu,yağmur, güneş, güneşli, açık hava, bulut,bulutlu, ankara hava durumu, antalya hava durumu, durumu, rüzgarlı, izmir,istanbul,ankara,antalya, izmir hava durumu, eskişehir hava durumu, bodrum hava durumu, samsun hava durumu, sakarya hava durumu, çanakkale hava durumu, gaziantep hava durumu, konya hava durumu, adana hava durumu, çorum hava durumu, akdeniz hava durumur, akdeniz, kayseri hava durumu,karadeniz hava durumu, trabzon hava durumu">
+  <meta name="author" content="Açelya Çalışkan">
+  <title>Hava Durumu</title> 
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <!-- Animasyonların, Yıldızların ve Çimlerin Görüneceği Katman -->
+  <div id="animation-layer"></div>
+
+  <!-- Satürn İmza Alanı -->
+  <div class="signature">
+    <span class="planet">🪐</span>
+    <span class="name">Açelya</span>
+  </div>
+  
+  <!-- Ana Uygulama Konteyneri -->
+  <div class="app-container">
+    <h1>Hava Durumu</h1>
+    <p>Hava durumunu öğrenmek istediğiniz şehrin adını yazınız.</p>
+    
+    <!-- Arama Kutusu ve Butonu -->
+    <div class="search-container">
+      <input type="text" id="city" placeholder="Şehir adını giriniz">
+      <button id="searchBtn">🔍</button>
+    </div>
+
+    <!-- Popüler Şehir Kısayolları -->
+    <div class="popular-cities">
+      <button class="city-tag" onclick="quickSearch('İzmir')">İzmir</button>
+      <button class="city-tag" onclick="quickSearch('İstanbul')">İstanbul</button>
+      <button class="city-tag" onclick="quickSearch('Ankara')">Ankara</button>
+      <button class="city-tag" onclick="quickSearch('Antalya')">Antalya</button>
+    </div>
+
+    <!-- Hava Durumu Kartı -->
+    <div id="weather-card">
+      <h2 id="city-name"></h2>
+      <div id="weather-icon">🌤</div>
+      <h1 id="temperature"></h1>
+      <p id="description"></p>
+      <p id="humidity"></p>
+      <p id="wind"></p>
+    </div>
+  </div>
+
+  <!-- Alt Bilgi (Footer) -->
+  <footer>
+    <p>Hava durumu verileri <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> tarafından sağlanmaktadır.</p>
+  </footer>
+
+  <!-- JavaScript Dosyası -->
+  <script src="index.js"></script>
+</body>
+</html>
