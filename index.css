@@ -5,126 +5,206 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #74b9ff, #0984e3);
-    transition: background 1s ease;
-    padding: 20px;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    transition: background 0.8s ease;
+    padding: 30px 20px;
     box-sizing: border-box;
     overflow-x: hidden;
     position: relative;
 }
 
-/* Hava Durumuna Göre Arka Planlar */
-body.sunny { background: linear-gradient(135deg, #56ccf2, #2f80ed); }
-body.cloudy { background: linear-gradient(135deg, #bdc3c7, #2c3e50); }
-body.rainy { background: linear-gradient(135deg, #3a6073, #16222a); }
-body.snowy { background: linear-gradient(135deg, #cfd9df, #e2ebf0); }
-body.stormy { background: linear-gradient(135deg, #1f4068, #162447); }
+/* Hava Durumuna Göre Şık Arka Plan Geçişleri */
+body.sunny { background: linear-gradient(135deg, #2980b9, #2c3e50); }
+body.cloudy { background: linear-gradient(135deg, #4ca1af, #2c3e50); }
+body.rainy { background: linear-gradient(135deg, #203a43, #0f2027); }
+body.snowy { background: linear-gradient(135deg, #3e5151, #decba4); }
+body.stormy { background: linear-gradient(135deg, #141e30, #243b55); }
+body.night { background: linear-gradient(135deg, #090a0f, #1a1c29); }
 
-/* İçerik Konteyneri (Kartlarınarkada kalmaması için) */
+/* Ana Uygulama Konteyneri */
 .app-container {
     position: relative;
     z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    max-width: 440px;
 }
 
-/* Başlık ve Metinler */
+/* Başlık ve Açıklamalar */
 h1 {
     color: #ffffff;
-    font-size: 36px;
-    margin-bottom: 10px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    font-size: 32px;
+    margin-bottom: 8px;
+    font-weight: 600;
     text-align: center;
+    letter-spacing: -0.5px;
 }
 
 p {
-    color: #f1f2f6;
-    font-size: 16px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 15px;
     margin-bottom: 20px;
     text-align: center;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 /* Arama Alanı */
 .search-container {
     display: flex;
     gap: 10px;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
+    width: 100%;
 }
 
 input {
-    padding: 12px 18px;
-    font-size: 16px;
-    border: none;
-    border-radius: 50px;
+    flex: 1;
+    padding: 14px 20px;
+    font-size: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
     outline: none;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    width: 240px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    backdrop-filter: blur(10px);
     transition: 0.3s;
 }
 
+input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
 input:focus {
-    background: #ffffff;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 button {
-    padding: 12px 20px;
+    padding: 14px 20px;
     font-size: 16px;
     cursor: pointer;
-    background: #ffffff;
-    border: none;
-    border-radius: 50px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
+    color: #fff;
+    backdrop-filter: blur(10px);
     transition: 0.3s;
 }
 
 button:hover {
-    background: #f1f2f6;
-    transform: scale(1.08);
+    background: rgba(255, 255, 255, 0.35);
 }
 
-/* Hava Durumu Kartı (Cam Efekti) */
-#weather-card {
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 25px 40px;
+/* Popüler Şehir Kısayolları */
+.popular-cities {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.city-tag {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 6px 14px;
     border-radius: 20px;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+    color: #ffffff;
+    font-size: 13px;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: 0.3s;
+}
+
+.city-tag:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Ortak Kart Tasarımı (Cam Efekti - Glassmorphism) */
+#weather-card, #forecast-card, #sehir-rehberi-bloku {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 24px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.2);
     text-align: center;
     color: #ffffff;
-    min-width: 280px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
 }
 
-#city-name { font-size: 24px; margin-bottom: 10px; color: #fff; }
-#weather-icon { font-size: 45px; margin: 10px 0; }
-#temperature { font-size: 28px; font-weight: bold; margin: 10px 0; color: #fff; }
-#description, #humidity, #wind { font-size: 16px; margin: 6px 0; color: #f8f9fa; }
+#city-name { font-size: 22px; margin-bottom: 8px; font-weight: 500; }
+#weather-icon { font-size: 48px; margin: 8px 0; }
+#temperature { font-size: 30px; font-weight: bold; margin: 8px 0; }
+#description, #humidity, #wind { font-size: 15px; margin: 5px 0; color: rgba(255, 255, 255, 0.9); }
 
-/* İmza (Satürn ve Açelya - Sabit ve Güvenli) */
+/* 5 Günlük Tahmin Kutuları Düzeni */
+#forecast-card h3 {
+    font-size: 15px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+#forecast-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+#forecast-container > div {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 4px;
+    border-radius: 12px;
+    font-size: 13px;
+    flex: 1;
+    text-align: center;
+}
+
+/* SEO Rehber Bloğu Düzeni */
+#sehir-rehberi-bloku {
+    text-align: left;
+}
+
+#sehir-rehberi-bloku h2 {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+#sehir-rehberi-bloku p {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+    line-height: 1.5;
+    text-align: left;
+}
+
+/* Sabit Satürn İmzası */
 .signature {
     position: absolute;
-    top: 20px;
+    top: 25px;
     right: 25px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 18px;
+    gap: 6px;
+    font-size: 16px;
     color: #ffffff;
-    font-weight: bold;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    font-weight: 500;
     z-index: 20;
 }
 
 .planet {
     display: inline-block;
-    animation: spin 12s linear infinite;
+    animation: spin 15s linear infinite;
 }
 
 @keyframes spin {
@@ -132,176 +212,29 @@ button:hover {
     to { transform: rotate(360deg); }
 }
 
-/* --- DİNAMİK HAVA EFEKTLERİ --- */
-#animation-layer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 1;
-}
-
-/* Güneşli: Köşede Hareketli Güneş */
-.sun-element {
-    position: absolute;
-    top: 40px;
-    left: 40px;
-    font-size: 80px;
-    animation: sunMove 6s ease-in-out infinite alternate;
-    filter: drop-shadow(0 0 20px rgba(255, 221, 0, 0.6));
-}
-
-@keyframes sunMove {
-    0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(30px, -15px) scale(1.08); }
-}
-
-/* Çim Görünümü (Alt Kısım) */
-.grass-element {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 40px;
-    background: linear-gradient(to top, #27ae60, transparent);
-    opacity: 0.7;
-}
-
-/* Bulutlu: Kayan Bulutlar */
-.cloud-element {
-    position: absolute;
-    font-size: 60px;
-    color: rgba(255, 255, 255, 0.8);
-    animation: cloudDrift 15s linear infinite;
-}
-
-@keyframes cloudDrift {
-    from { transform: translateX(-100px); }
-    to { transform: translateX(calc(100vw + 100px)); }
-}
-
-/* Yağmur ve Kar Tanecikleri */
-.raindrop, .snowflake {
-    position: absolute;
-    top: -20px;
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 50%;
-}
-
-.raindrop {
-    width: 2px;
-    height: 20px;
-    background: linear-gradient(transparent, #74b9ff);
-    animation: fallRain 0.8s linear infinite;
-}
-
-.snowflake {
-    width: 6px;
-    height: 6px;
-    background: #ffffff;
-    animation: fallSnow 3s linear infinite;
-    box-shadow: 0 0 5px #fff;
-}
-
-@keyframes fallRain {
-    to { transform: translateY(105vh); }
-}
-
-@keyframes fallSnow {
-    0% { transform: translateY(-20px) translateX(0); }
-    50% { transform: translateY(50vh) translateX(15px); }
-    100% { transform: translateY(105vh) translateX(-15px); }
-}
-
-/* Footer */
-/* Footer (Cam Efektli Yeni Hali) */
+/* Şık Cam Efektli Footer */
 footer {
-    position: relative;
-    margin-top: 30px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 12px 20px;
-    border-radius: 15px;
+    width: 100%;
+    max-width: 440px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 14px;
+    border-radius: 16px;
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.9);
-    z-index: 10;
+    color: rgba(255, 255, 255, 0.7);
     text-align: center;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    z-index: 10;
 }
 
 footer a { 
     color: #ffffff; 
     text-decoration: underline; 
-    font-weight: 500;
 }
 
-
-.city-tag {
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    padding: 6px 14px;
-    border-radius: 20px;
-    color: #ffffff;
-    font-size: 14px;
-    cursor: pointer;
-    backdrop-filter: blur(5px);
-    transition: 0.3s;
-}
-
-.city-tag:hover {
-    background: rgba(255, 255, 255, 0.4);
-    transform: translateY(-2px);
-}
-/* Gece / Yıldızlı Arka Plan */
-body.night {
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-}
-
-/* Parıldayan Yıldız Efekti */
-.star-element {
-    position: absolute;
-    background: #ffffff;
-    border-radius: 50%;
-    animation: twinkle 2s infinite ease-in-out;
-    box-shadow: 0 0 6px #ffffff;
-}
-
-@keyframes twinkle {
-    0%, 100% { opacity: 0.2; transform: scale(0.8); }
-    50% { opacity: 1; transform: scale(1.2); }
-}
-#sehir-rehberi-bloku {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 20px;
-    border-radius: 15px;
-    margin-top: 25px;
-    max-width: 420px;
-    width: 100%;
-    box-sizing: border-box;
-    text-align: left;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-}
-
-#sehir-rehberi-bloku h2 {
-    font-size: 16px;
-    color: #ffffff;
-    margin-bottom: 8px;
-    text-align: left;
-    text-shadow: none;
-}
-
-#sehir-rehberi-bloku p {
-    font-size: 13px;
-    color: #f1f2f6;
-    text-align: left;
-    margin: 0;
-    line-height: 1.4;
-    text-shadow: none;
+/* Animasyon Katmanını Tamamen İptal Ettik (Kafaya Göre Uçan Nesneler Yok!) */
+#animation-layer {
+    display: none;
 }
