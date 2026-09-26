@@ -217,22 +217,29 @@ button:hover {
 }
 
 /* Footer */
+/* Footer (Cam Efektli Yeni Hali) */
 footer {
-    position: absolute;
-    bottom: 10px;
+    position: relative;
+    margin-top: 30px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 12px 20px;
+    border-radius: 15px;
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.9);
     z-index: 10;
+    text-align: center;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
 }
-footer a { color: #ffffff; text-decoration: underline; }
-/* Popüler Şehir Kısayol Butonları */
-.popular-cities {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
+
+footer a { 
+    color: #ffffff; 
+    text-decoration: underline; 
+    font-weight: 500;
 }
+
 
 .city-tag {
     background: rgba(255, 255, 255, 0.2);
@@ -275,7 +282,7 @@ body.night {
     padding: 20px;
     border-radius: 15px;
     margin-top: 25px;
-    max-width: 360px;
+    max-width: 420px;
     width: 100%;
     box-sizing: border-box;
     text-align: left;
