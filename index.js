@@ -128,8 +128,9 @@ async function getWeather(city) {
             else if (wCode >= 71 && wCode <= 77) icon = "❄️";
             else if (wCode >= 95) icon = "⛈️";
 
-            const dayBox = document.createElement("div");
-            dayBox.style.cssText = "background: rgba(255, 255, 255, 0.2); padding: 8px 6px; border-radius: 12px; font-size: 13px; flex: 1; text-align: center;";
+                        const dayBox = document.createElement("div");
+            dayBox.style.cssText = "background: rgba(255, 255, 255, 0.2); padding: 10px 8px; border-radius: 12px; font-size: 14px; flex: 1; text-align: center;";
+
             dayBox.innerHTML = `
                 <div style="font-weight: bold; margin-bottom: 4px;">${dayName}</div>
                 <div style="font-size: 16px; margin: 4px 0;">${icon}</div>
