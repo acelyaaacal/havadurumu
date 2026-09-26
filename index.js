@@ -52,9 +52,10 @@ async function getWeather(city) {
         document.getElementById("city-name").textContent =
             `📍 ${district}${cityName && cityName !== district ? ", " + cityName : ""}`;
 
-        const weatherResponse = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code`
-        );
+       const weatherResponse = await fetch(
+    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max&timezone=auto`
+);
+
 
         const weatherData = await weatherResponse.json();
         const current = weatherData.current;
@@ -94,6 +95,49 @@ async function getWeather(city) {
             `💨 Rüzgar: ${current.wind_speed_10m} km/h`;
 
         document.getElementById("description").textContent = description;
+      const baslik = document.getElementById("blok-baslik");
+        const icerik = document.getElementById("blok-icerik");
+
+        if (cityName.includes("İstanbul") || district.includes("İstanbul")) {
+            baslik.innerText = "İstanbul Hava Durumu ve Bölge Analizi";
+            icerik.innerText = "İstanbul'da dinamik bir geçiş iklimi hakimdir. Bugün İstanbul hava durumu verilerine baktığımızda nem oranının deniz etkisiyle yüksek olduğunu görüyoruz. İstanbul seyahatleriniz öncesi anlık tahminleri incelemeniz önerilir...";
+        } 
+        else if (cityName.includes("Ankara") || district.includes("Ankara")) {
+            baslik.innerText = "Ankara Hava Durumu ve Karasal İklim Özellikleri";
+            icerik.innerText = "Ankara, İç Anadolu'nun karasal iklimine sahiptir. Yazları sıcak ve kurak, kışları ise soğuk geçer. Ankara güncel hava durumu tahmin raporumuza göre akşam saatlerinde sıcaklık düşüş gösterebilir...";
+        }
+        else {
+            baslik.innerText = `${district} Hava Durumu ve Meteoroloji Rehberi`;
+            icerik.innerText = `${district} genel olarak güncel hava koşullarıyla dikkat çekmektedir. Anlık hava durumu verilerinde rüzgar ve sıcaklık değerleri anlık olarak güncellenmektedir. Detaylar için sayfamızı takipte kalın.`;
+        }
+      const daily = weatherData.daily;
+        const forecastContainer = document.getElementById("forecast-container");
+        forecastContainer.innerHTML = ""; // Önceki aramadan kalanları temizle
+
+        for (let i = 0; i < 5; i++) {
+            const dateStr = daily.time[i]; 
+            const dateObj = new Date(dateStr);
+            
+            const dayName = dateObj.toLocaleDateString('tr-TR', { weekday: 'short' });
+            const maxTemp = Math.round(daily.temperature_2m_max[i]);
+            const wCode = daily.weather_code[i];
+
+            let icon = "☀️";
+            if (wCode >= 1 && wCode <= 3) icon = "⛅";
+            else if (wCode >= 51 && wCode <= 67) icon = "🌧️";
+            else if (wCode >= 71 && wCode <= 77) icon = "❄️";
+            else if (wCode >= 95) icon = "⛈️";
+
+            const dayBox = document.createElement("div");
+            dayBox.style.cssText = "background: rgba(255, 255, 255, 0.2); padding: 8px 6px; border-radius: 12px; font-size: 13px; flex: 1; text-align: center;";
+            dayBox.innerHTML = `
+                <div style="font-weight: bold; margin-bottom: 4px;">${dayName}</div>
+                <div style="font-size: 16px; margin: 4px 0;">${icon}</div>
+                <div>${maxTemp}°C</div>
+            `;
+            
+            forecastContainer.appendChild(dayBox);
+        }
 
     } catch (error) {
         console.error("Hata:", error);
