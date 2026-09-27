@@ -17,17 +17,10 @@
     
     <meta name="author" content="Açelya Çalışkan">
     <link rel="stylesheet" href="index.css">
-    <link rel="manifest" href="manifest.json">
     </head>
   <body>
   <!-- Animasyonların, Yıldızların ve Çimlerin Görüneceği Katman -->
   <div id="animation-layer"></div>
-
-  <!-- Satürn İmza Alanı -->
-  <div class="signature">
-    <span class="planet">🪐</span>
-    <span class="name">Açelya</span>
-  </div>
   
   <!-- Ana Uygulama Konteyneri -->
   <div class="app-container">
@@ -48,19 +41,34 @@
       <button class="city-tag" onclick="quickSearch('Antalya')">Antalya</button>
     </div>
 
-    <!-- Hava Durumu Kartı -->
+        <!-- Hava Durumu Kartı -->
     <div id="weather-card">
-      <h2 id="city-name"></h2>
-      <div id="weather-icon">🌤</div>
-      <h1 id="temperature"></h1>
-      <p id="description"></p>
-      <p id="humidity"></p>
+      <h2 id="city-name">Yükleniyor...</h2>
+      <div id="weather-icon">⏳</div>
+      <h1 id="temperature">Lütfen bekleyin</h1>
+      <p id="description">Hava durumu verileri getiriliyor...</p>
+      <p id="humidity">Bu işlem bir saniyeden kısa ya da daha uzun sürebilir...</p>
       <p id="wind"></p>
     </div>
+
         <!-- 📅 5 Günlük Hava Tahmini Alanı -->
     <div id="forecast-card" style="margin-top: 20px; background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); padding: 20px; border-radius: 20px; max-width: 420px; width: 100%; box-sizing: border-box; text-align: center; color: #fff; box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);">
         <h3 style="font-size: 16px; margin-bottom: 15px; color: #fff;">📅 5 Günlük Hava Tahmini</h3>
         <div id="forecast-container" style="display: flex; justify-content: space-between; gap: 8px;">
+            <!-- JavaScript burayı dolduracak -->
+        </div>
+    </div>
+    <!-- 🕒 Saatlik Hava Tahmini Alanı -->
+    <div id="hourly-card" style="margin-top: 20px; background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); padding: 20px; border-radius: 20px; max-width: 420px; width: 100%; box-sizing: border-box; text-align: center; color: #fff; box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);">
+        <h3 style="font-size: 16px; margin-bottom: 15px; color: #fff;">🕒 Saatlik Hava Tahmini</h3>
+        <div id="hourly-container" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: thin;">
+            <!-- JavaScript burayı dolduracak -->
+        </div>
+    </div>
+    <!-- 📅 YENİ EKLENECEK: Seçilen Günün Detaylı Saatlik Tahmin Kartı (Başlangıçta gizli) -->
+    <div id="selected-day-card" style="display: none; margin-top: 20px; background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); padding: 20px; border-radius: 20px; max-width: 420px; width: 100%; box-sizing: border-box; text-align: center; color: #fff; box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);">
+        <h3 id="selected-day-title" style="font-size: 16px; margin-bottom: 15px; color: #fff;">📅 Gün Tahmini</h3>
+        <div id="selected-hourly-container" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: thin;">
             <!-- JavaScript burayı dolduracak -->
         </div>
     </div>
