@@ -335,3 +335,12 @@ async function quickSearch(cityName) {
 window.addEventListener("DOMContentLoaded", () => {
     getWeather("İzmir");
 });
+// İletişim popup penceresini açıp kapatan fonksiyon
+function toggleContactPopup() {
+    const overlay = document.getElementById("contact-popup-overlay");
+    if (overlay.style.display === "flex") {
+        overlay.style.display = "none";
+    } else {
+        overlay.style.display = "flex";
+    }
+}
