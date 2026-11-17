@@ -4,42 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- 1. Geliştirilmiş Başlık (Title) -->
     <title>Hava Durumu - Anlık Güncel Hava Tahminleri</title>
-    
-    <!-- 2. Google ve Arama Sonuçları İçin Açıklama (Description) - ÇOK ÖNEMLİ -->
     <meta name="description" content="Anlık hava durumu öğrenme uygulaması. İstanbul, Ankara, İzmir ve tüm illerin güncel hava durumu tahminlerini hızlıca öğrenin.">
-    
-    <!-- 3. Sosyal Medyada Paylaşıldığında Şık Görünmesi İçin (Open Graph) -->
-    <meta property="og:title" content="Hava Durumu - Anlık Güncel Hava Tahminleri">
-    <meta property="og:description" content="Tüm şehirlerin anlık hava durumunu hızlıca öğrenin.">
-    <meta property="og:type" content="website">
-    
     <meta name="author" content="Açelya Çalışkan">
     <link rel="stylesheet" href="index.css">
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-HMLE53D7Y1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-HMLE53D7Y1');
-</script>
-    </head>
-  <body>
-  <!-- Animasyonların, Yıldızların ve Çimlerin Görüneceği Katman -->
-  <div id="animation-layer"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Gerçekçi Arka Plan Gökyüzü Canvas -->
+  <canvas id="weather-canvas"></canvas>
   
   <!-- Ana Uygulama Konteyneri -->
   <div class="app-container">
     <h1>Hava Durumu</h1>
     <p>Hava durumunu öğrenmek istediğiniz şehrin adını yazınız.</p>
     
-    <!-- Arama Kutusu ve Butonu -->
-    <div class="search-container">
-      <input type="text" id="city" placeholder="Şehir adını giriniz">
+    <!-- Arama Kutusu -->
+    <div class="search-container" style="position: relative;">
+      <input type="text" id="city" placeholder="Şehir adını giriniz" autocomplete="off">
       <button id="searchBtn">🔍</button>
+      <div id="autocomplete-list" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(30, 60, 114, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 12px; margin-top: 6px; z-index: 100; max-height: 200px; overflow-y: auto; text-align: left; box-shadow: 0 8px 32px rgba(0,0,0,0.3);"></div>
     </div>
 
     <!-- Popüler Şehir Kısayolları -->
@@ -50,76 +35,72 @@
       <button class="city-tag" onclick="quickSearch('Antalya')">Antalya</button>
     </div>
 
-        <!-- Hava Durumu Kartı -->
+    <!-- 🌧️ ÖZEL DAMLALI ANA HAVA DURUMU KARTI -->
     <div id="weather-card">
+      <!-- Kart Üzerindeki Gerçekçi Su Damlacıkları Katmanı -->
+      <div id="card-rain-drops"></div>
+
       <h2 id="city-name">Yükleniyor...</h2>
       <div id="weather-icon">⏳</div>
       <h1 id="temperature">Lütfen bekleyin</h1>
       <p id="description">Hava durumu verileri getiriliyor...</p>
       <p id="humidity">Bu işlem bir saniyeden kısa ya da daha uzun sürebilir...</p>
       <p id="wind"></p>
+      <p id="apparent-temp"></p>
+      <p id="uv-index"></p>
+      <p id="sun-times"></p>
     </div>
 
-        <!-- 📅 5 Günlük Hava Tahmini Alanı -->
+    <!-- 📅 5 Günlük Hava Tahmini Alanı -->
     <div id="forecast-card" style="margin-top: 20px; background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); padding: 20px; border-radius: 20px; max-width: 420px; width: 100%; box-sizing: border-box; text-align: center; color: #fff; box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);">
         <h3 style="font-size: 16px; margin-bottom: 15px; color: #fff;">📅 5 Günlük Hava Tahmini</h3>
-        <div id="forecast-container" style="display: flex; justify-content: space-between; gap: 8px;">
-            <!-- JavaScript burayı dolduracak -->
-        </div>
+        <div id="forecast-container" style="display: flex; justify-content: space-between; gap: 8px;"></div>
     </div>
+
     <!-- 🕒 Saatlik Hava Tahmini Alanı -->
     <div id="hourly-card" style="margin-top: 20px; background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); padding: 20px; border-radius: 20px; max-width: 420px; width: 100%; box-sizing: border-box; text-align: center; color: #fff; box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);">
         <h3 style="font-size: 16px; margin-bottom: 15px; color: #fff;">🕒 Saatlik Hava Tahmini</h3>
-        <div id="hourly-container" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: thin;">
-            <!-- JavaScript burayı dolduracak -->
-        </div>
+        <div id="hourly-container" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: thin;"></div>
     </div>
-    <!-- 📅 YENİ EKLENECEK: Seçilen Günün Detaylı Saatlik Tahmin Kartı (Başlangıçta gizli) -->
+
+    <!-- 📈 Sıcaklık Eğrisi Grafik Alanı -->
+    <div id="chart-card" style="margin-top: 20px; background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); padding: 20px; border-radius: 20px; max-width: 420px; width: 100%; box-sizing: border-box; color: #fff;">
+        <h3 style="font-size: 16px; margin-bottom: 15px; text-align: center; color: #fff;">📈 Sıcaklık Eğrisi</h3>
+        <canvas id="temperatureChart"></canvas>
+    </div>
+
+    <!-- 📅 Seçilen Günün Detaylı Saatlik Tahmin Kartı -->
     <div id="selected-day-card" style="display: none; margin-top: 20px; background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); padding: 20px; border-radius: 20px; max-width: 420px; width: 100%; box-sizing: border-box; text-align: center; color: #fff; box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);">
         <h3 id="selected-day-title" style="font-size: 16px; margin-bottom: 15px; color: #fff;">📅 Gün Tahmini</h3>
-        <div id="selected-hourly-container" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: thin;">
-            <!-- JavaScript burayı dolduracak -->
-        </div>
+        <div id="selected-hourly-container" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: thin;"></div>
     </div>
 
   </div>
-      <!-- YENİ EKLENECEK: SEO Rehber Bloğu -->
-    <div id="sehir-rehberi-bloku" style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 15px; max-width: 500px; width: 100%; box-sizing: border-box; text-align: left;">
+
+  <!-- SEO Rehber Bloğu -->
+  <div id="sehir-rehberi-bloku" style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 15px; max-width: 500px; width: 100%; box-sizing: border-box; text-align: left;">
     <h2 id="blok-baslik" style="font-size: 18px; color: #fff; margin-bottom: 10px;">İzmir Hava Durumu ve Meteoroloji Rehberi</h2>
     <p id="blok-icerik" style="font-size: 14px; color: #f1f2f6; text-align: left; margin: 0; line-height: 1.5;">
-            İzmir, Akdeniz ikliminin etkisinde olan bir şehrimizdir. Şu anki güncel hava durumu verilerine yukarıdaki panelden ulaşabilirsiniz...
-        </p>
-    </div>
-
-  <!-- Alt Bilgi (Footer) -->
-    <br>
-    
-  <footer>
-    <p>Hava durumu verileri <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> tarafından sağlanmaktadır.</p>
-  </footer>
-    <!-- Alt Bilgi (Footer) -->
-  
-    
-  <!-- ✉️ EKRANIN EN ALTINDAKİ TIKLANABİLİR İLETİŞİM YAZISI (Eksik Olan Parça) -->
-  <div style="text-align: center; margin: 15px 0; z-index: 10; position: relative;">
-      <span onclick="toggleContactPopup()" style="color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer; text-decoration: underline; transition: 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">
-          ✉️ İletişim / Geri Bildirim
-      </span>
+        İzmir, Akdeniz ikliminin etkisinde olan bir şehrimizdir. Şu anki güncel hava durumu verilerine yukarıdaki panelden ulaşabilirsiniz...
+    </p>
   </div>
 
-  <!-- Ekranın Ortasında Açılan Bebek Mavisi Cam Efektli İletişim Kartı -->
+  <br>
+  <footer style="width: 100%; max-width: 440px; background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); padding: 14px; border-radius: 16px; font-size: 13px; color: rgba(255, 255, 255, 0.7); text-align: center; box-sizing: border-box; margin-bottom: 10px; z-index: 20; position: relative;">
+    <p style="margin-bottom: 10px;">Hava durumu verileri <a href="https://open-meteo.com/" target="_blank" rel="noopener" style="color: #fff; text-decoration: underline;">Open-Meteo.com</a> tarafından sağlanmaktadır.</p>
+    <div>
+        <span onclick="toggleContactPopup()" style="color: rgba(255,255,255,0.85); font-size: 12px; cursor: pointer; text-decoration: underline;">
+            ✉️ İletişim / Geri Bildirim
+        </span>
+    </div>
+  </footer>
+
+  <!-- İletişim Popup Penceresi -->
   <div id="contact-popup-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
       <div style="background: rgba(116, 185, 255, 0.25); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.4); padding: 24px; border-radius: 20px; max-width: 400px; width: 100%; box-sizing: border-box; color: #fff; box-shadow: 0 15px 35px rgba(0,0,0,0.2); text-align: left; position: relative;">
-          
-          <!-- Kapatma Çarpısı -->
           <button onclick="toggleContactPopup()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #fff; font-size: 16px; cursor: pointer; padding: 5px;">✕</button>
-          
           <h3 style="font-size: 18px; margin-top: 0; margin-bottom: 15px; font-weight: 600;">Bize Ulaşın</h3>
-          
-          <!-- Form -->
-         <form action="https://formsubmit.co/havadurumuu.iletisim@gmail.com" method="POST" style="display: flex; flex-direction: column; gap: 12px;">
-             <input type="hidden" name="_next" value="https://havadurumuu.com/">
-    <input type="text" name="_honey" style="display:none">
+          <form action="gonder.php" method="POST" style="display: flex; flex-direction: column; gap: 12px;">
               <div>
                   <label style="font-size: 12px; opacity: 0.9; display: block; margin-bottom: 4px;">Adınız:</label>
                   <input type="text" name="ad" placeholder="Adınızı giriniz" required style="width: 100%; box-sizing: border-box; padding: 10px 14px; font-size: 14px; border-radius: 10px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; outline: none;">
@@ -132,12 +113,11 @@
                   <label style="font-size: 12px; opacity: 0.9; display: block; margin-bottom: 4px;">Mesajınız:</label>
                   <textarea name="mesaj" placeholder="Mesajınızı buraya yazın..." rows="3" required style="width: 100%; box-sizing: border-box; padding: 10px 14px; font-size: 14px; border-radius: 10px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; outline: none; resize: none;"></textarea>
               </div>
-              <button type="submit" style="width: 100%; margin-top: 5px; padding: 12px; background: rgba(255, 255, 255, 0.3); border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 12px; color: #fff; font-weight: 600; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.45)'" onmouseout="this.style.background='rgba(255,255,255,0.3)'">Gönder</button>
+              <button type="submit" style="width: 100%; margin-top: 5px; padding: 12px; background: rgba(255, 255, 255, 0.3); border: 1px solid rgba(255, 255, 254, 0.4); border-radius: 12px; color: #fff; font-weight: 600; cursor: pointer;">Gönder</button>
           </form>
       </div>
   </div>  
  
-<!-- JavaScript Dosyası -->
   <script src="index.js"></script>
 </body>
 </html>
